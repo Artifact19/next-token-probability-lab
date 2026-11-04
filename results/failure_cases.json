@@ -1,0 +1,1052 @@
+{
+  "0.2": [
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Japan"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Japan"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Montreal"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Toronto"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Australia"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Sydney"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Egypt"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Alexandria"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Rio de Janeiro"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Sodium"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Ca"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "Sodium"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "Sodium"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Venus"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Venus"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Venus"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "The Equator"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "The Equator"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "The Great Sea"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "The Great Barrier Reef"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Nitrogen"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Aqueous"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Oxygen"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Nitrogen"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "William Shakespeare"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "William Shakespeare"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "The Artist"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "The Mona Lisa"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1941"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1946"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "The French physicist Jean-Jac"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "The United States"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "1,000"
+    }
+  ],
+  "0.6": [
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "Saint-Denis"
+    },
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "France"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Japan"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Osaka"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Quebec"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Toronto"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Australia"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Adelaide"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Alexandria"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Alexandria"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Rio"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Brasil"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "Spain"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Sphenylalanine"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Ca"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "Sodium"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Venus"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Mars"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Mercury"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Venus"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "0\u00b0C"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "The temperature at which water boils"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "The Gulf of Mexico"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "The Bahamas"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Nitrate"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Oil"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Agaric"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Nitrogen"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Shakespeare"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "William Shakespeare"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "Peter Pan"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "J. R. R."
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1917 1917<|endoftext|>"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1939"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "The French physicist Jean-August"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "The Suez"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Sicily"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Only one"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Four"
+    }
+  ],
+  "1.0": [
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "Saint-Augustin"
+    },
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "France At Large"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Japan"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Osaka"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Quebec"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Toronto"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Ulquiorra"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Adelaide"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "York (Rome, 5"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Alexandria"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Rio"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Brasil"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "expected": "berlin",
+      "generated": "Germany"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "Felicia, tomb of J"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "Florencia"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Sphenoth?"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Ca"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "Sodium"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Venus"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Slate!"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Mercury"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Mercury"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "Twelve deg. Wm"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "Somewhat like 15C."
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "The known"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "Tonga"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Nitrate"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Telenet for carbon dioxide"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Agar or E. Thu"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Red"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Stuart Dilworth"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Valerian"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "Various artists"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "J. R. R."
+    },
+    {
+      "question": "Who was the first President of the United States?",
+      "expected": "washington",
+      "generated": "The Prophet Joseph Fielding Smith"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1979 1917<|endoftext|>"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "July 1, 1941"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "The English physicist"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "Gehry O?"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Romulus The Arena"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Sicily"
+    },
+    {
+      "question": "What is the main language spoken in Brazil?",
+      "expected": "portuguese",
+      "generated": "English"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Only 3 And it is up"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Divide by one, 2010"
+    }
+  ],
+  "1.2": [
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "France At Large"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "49 Akira Sagahi"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Osaka"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Quebec"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Toronto"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Ulquiorra approximately 1"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Adelaide"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "York (Rome, 5"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Alexandria"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Recife"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Brasigurfa(gen"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "expected": "berlin",
+      "generated": "Hannover"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "expected": "berlin",
+      "generated": "Bucharest"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "Felicia, tomb of J"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "Florencia"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Sphenoth?"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Solvent"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "Sodium"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Venus"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Slate! The three origami"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Mercury"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Asteroid Peron by Wa"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "Twelve deg Fahrenheit"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "Somewhat like Mid\u00f6tic"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "The known"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "Tonga"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Nitrate"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Telpos"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Agar Window, Compaq"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Niger Oil (GRF)"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Stuart Dilright"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Val Dolce Jamaica...Brook"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "Various artists"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "Joran Roren (Sy"
+    },
+    {
+      "question": "Who was the first President of the United States?",
+      "expected": "washington",
+      "generated": "The Prophet Joseph Fielding Smith"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1979 1917<|endoftext|>"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "July 1, 1941"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "The Number Kilometers Cluster Theory"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "Gehry O?"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Romulus The Arena"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Sicily (ANJ)"
+    },
+    {
+      "question": "What is the main language spoken in Brazil?",
+      "expected": "portuguese",
+      "generated": "English"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Only that way it feels '"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Divide by one, Jupiter 17"
+    }
+  ],
+  "1.6": [
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "Invitation to Catalogue tourism"
+    },
+    {
+      "question": "What is the capital of France?",
+      "expected": "paris",
+      "generated": "Liberation At Calwerchidsburgh"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Impact\ufffd Sagahi Conservative Cook"
+    },
+    {
+      "question": "What is the capital of Japan?",
+      "expected": "tokyo",
+      "generated": "Osaka Imperial Life"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Alberta"
+    },
+    {
+      "question": "What is the capital of Canada?",
+      "expected": "ottawa",
+      "generated": "Toronto"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "Ul Frankfurt"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "expected": "canberra",
+      "generated": "By del Ott Joyain\ufffd"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "York NYU Women related international rate"
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "expected": "cairo",
+      "generated": "Alexandria"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Rec\u00e3o--Whome"
+    },
+    {
+      "question": "What is the capital of Brazil?",
+      "expected": "brasilia",
+      "generated": "Universityity, spelling(gen"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "expected": "berlin",
+      "generated": "Hannover und Prague Clarence Mul"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "expected": "berlin",
+      "generated": "Odin Prinzd\u00e5$"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "FelNewfest tomb americans"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "expected": "madrid",
+      "generated": "Florencia Raqqa de Ind"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Spacoiard? Editing TV"
+    },
+    {
+      "question": "What is the chemical formula of water?",
+      "expected": "h2o",
+      "generated": "Solventye dilmitoi"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "System NASE be bats associations"
+    },
+    {
+      "question": "What is the chemical symbol for sodium?",
+      "expected": "na",
+      "generated": "Cap; Cesara Gospel'-"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Empire, where Avidolla"
+    },
+    {
+      "question": "Which planet is closest to the Sun?",
+      "expected": "mercury",
+      "generated": "Slate Latin stra8rella ut"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Mercuryicon climbers Jahorth-"
+    },
+    {
+      "question": "Which is the largest planet in the Solar System?",
+      "expected": "jupiter",
+      "generated": "Asteroid Peron by Wa"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "Twelve deg Fahrenheit Wm /"
+    },
+    {
+      "question": "At what temperature in degrees Celsius does water boil at sea level?",
+      "expected": "100",
+      "generated": "Somewhat like Mid\u00f6dale"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "Idle Walshweight Kumkinyou"
+    },
+    {
+      "question": "Which is the largest ocean on Earth?",
+      "expected": "pacific",
+      "generated": "Tongaran"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Nitrate Fluules? Hate"
+    },
+    {
+      "question": "What is the hardest naturally occurring substance?",
+      "expected": "diamond",
+      "generated": "Teledar"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "Ag few... tons robust Thu"
+    },
+    {
+      "question": "Which gas do plants absorb for photosynthesis?",
+      "expected": "carbon dioxide / co2",
+      "generated": "257yy overboard"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Stuart Dilright"
+    },
+    {
+      "question": "Who wrote the novel Pride and Prejudice?",
+      "expected": "austen",
+      "generated": "Val Dolhitiev Humpe"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "Various financial Motoli P aspir"
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "expected": "leonardo / da vinci",
+      "generated": "Joran Rhat Kings sp"
+    },
+    {
+      "question": "Who was the first President of the United States?",
+      "expected": "washington",
+      "generated": "Irving Galrushika a 1902"
+    },
+    {
+      "question": "Who was the first President of the United States?",
+      "expected": "washington",
+      "generated": "George R Walker A epil"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "1979 1917<|endoftext|>"
+    },
+    {
+      "question": "In which year did World War II end?",
+      "expected": "1945",
+      "generated": "July 1 \u2013 792 compens"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "The Number Kilometers Cluster played"
+    },
+    {
+      "question": "Who developed the theory of general relativity?",
+      "expected": "einstein",
+      "generated": "Gehworldly O?"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Rom-ardo"
+    },
+    {
+      "question": "Which river flows through Cairo?",
+      "expected": "nile",
+      "generated": "Sicily (ANJ) 180"
+    },
+    {
+      "question": "What is the main language spoken in Brazil?",
+      "expected": "portuguese",
+      "generated": "Curf oh Tolleoes"
+    },
+    {
+      "question": "What is the main language spoken in Brazil?",
+      "expected": "portuguese",
+      "generated": "He UFO pie punspect ("
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Only Sure way Travel PromptNeither"
+    },
+    {
+      "question": "How many continents are there on Earth?",
+      "expected": "seven / 7",
+      "generated": "Divide insists. Algeria still plumbing"
+    }
+  ]
+}
