@@ -24,7 +24,7 @@ The Next-Token Probability Lab is an interactive computational laboratory that a
 |---|---|---|---|
 | WebText (not redistributed) | GPT-2 pre-training | Model weights under MIT | Web-scraped outbound Reddit links |
 | BookCorpus + English Wikipedia | BERT pre-training | Apache-2.0 | Encyclopedic and fiction text corpus |
-| WikiText-2 (raw) | LSTM training; perplexity evaluation | CC BY-SA 3.0 | Verified Wikipedia articles |
+| WikiText-2 (raw) | LSTM training and perplexity evaluation | CC BY-SA 3.0 | Verified Wikipedia articles |
 | LAION-derived data | sd-turbo lineage | Stability AI Community License | Text-to-image synthesis dataset |
 
 ## 4. Metrics
@@ -38,8 +38,8 @@ Empirical measurements are computed by `evaluate_temperature_errors.py` and reco
 
 ## 5. Limitations
 
-- Benchmark coverage is focused on 24 reference factual prompts; confidence intervals reflect small-sample binomial uncertainty.
-- GPT-2 small (124M) exhibits limited parametric factual recall; high error rates at elevated temperatures are expected.
+- Benchmark coverage is focused on 24 reference factual prompts, and confidence intervals reflect small-sample binomial uncertainty.
+- GPT-2 small (124M) exhibits limited parametric factual recall, so higher error rates at elevated temperatures are expected.
 - Heuristic hallucination detection captures entity intrusions but does not detect all contextually subtle inaccuracies.
 - Lexical logit suppression operates on exact token sequences and does not resolve semantic paraphrasing.
 - Tokenizer alignment between BERT WordPiece and GPT-2 BPE operates over first sub-word bounds for multi-token words.

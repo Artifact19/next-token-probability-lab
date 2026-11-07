@@ -2,7 +2,10 @@
 
 An interactive computational laboratory analyzing next-token probability distributions in language models and evaluating how sampling configurations alter generation dynamics. The system implements autoregressive sampling mechanics, multi-head self-attention inspection, recurrent baseline comparison, bidirectional versus causal prediction, from-scratch PyTorch generation loops, and Responsible AI error audits.
 
-Built with a **React + Tailwind CSS** frontend and a **FastAPI** backend designed for deployment on **Vercel**.
+Built with a **React + Tailwind CSS** frontend and a **FastAPI** backend deployed on **Vercel**.
+
+- **Live Application:** https://next-token-probability-lab.vercel.app/
+- **GitHub Repository:** https://github.com/Artifact19/next-token-probability-lab
 
 ## Setup & Local Development
 
@@ -41,7 +44,7 @@ Or import the repository directly on the Vercel Dashboard:
 - Framework Preset: **Vite**
 - Build Command: `npm run build`
 - Output Directory: `dist`
-- Environment Variables: `HF_TOKEN` (optional: enables remote Hugging Face Inference API for sd-turbo)
+- Environment Variables: `HF_TOKEN` (enables remote Hugging Face Inference Providers for diffusion image synthesis)
 
 Unit test execution: `pytest -q`.
 
@@ -51,6 +54,7 @@ Unit test execution: `pytest -q`.
 flowchart LR
     UI[React + Tailwind UI Tabs U1-U5] --> API[api/index.py FastAPI]
     API --> GPT[core/gpt_engine.py]
+    API --> SVL[core/serverless_engine.py]
     API --> BERT[core/bert_engine.py]
     API --> ATT[core/attention_vis.py]
     API --> LSTM[core/lstm_baseline.py]
@@ -85,33 +89,39 @@ python evaluate_temperature_errors.py --samples 5 --update-readme
 
 ## Failure Analysis: High-Temperature Tail-Mass Inflation
 
-**Symptom.** At elevated sampling temperatures ($T = 1.2$) without truncation, completions drift away from target entities (for example, generating unrelated geographical names following `"What is the capital of Australia? A:"`), causing an increase in hallucination rate relative to low-temperature regimes ($T = 0.2$). Empirical failure cases are catalogued in `results/failure_cases.json`.
+**Symptom.** At elevated sampling temperatures (`T = 1.2`) without truncation, completions drift away from target entities (for example, generating unrelated geographical names following `"What is the capital of Australia? A:"`), causing an increase in hallucination rate relative to low-temperature regimes (`T = 0.2`). Empirical failure cases are catalogued in `results/failure_cases.json`.
 
 **Mathematical Formulation.** Next-token sampling draws indices from the temperature-scaled categorical distribution:
 
-$$p_i(T) = \frac{\exp(z_i / T)}{\sum_{j=1}^{V} \exp(z_j / T)}$$
+```text
+p_i(T) = exp(z_i / T) / sum_{j=1..V} exp(z_j / T)
+```
 
-where $z_i$ represents the unnormalized logit for vocabulary token $i$, and $V$ is vocabulary size ($V = 50{,}257$ for GPT-2). 
+where `z_i` represents the unnormalized logit for vocabulary token `i`, and `V` is the vocabulary size (`V = 50,257` for GPT-2).
 
-When $T > 1$, the reciprocal scaling factor $1/T < 1$ compresses pairwise logit margins $\Delta z = z_i - z_j$:
+When `T > 1`, the reciprocal scaling factor `1 / T < 1` compresses pairwise logit margins `delta_z = z_i - z_j`:
 
-$$\frac{\partial p_i}{\partial z_i} \propto \frac{1}{T}$$
+```text
+dp_i / dz_i is proportional to 1 / T
+```
 
 This flattening shifts probability mass away from prominent modes toward tens of thousands of low-probability tail tokens. Because the vocabulary cardinality is large, aggregated tail mass can exceed modal likelihood:
 
-$$\sum_{i \in \text{tail}} p_i(T) > p_{\text{mode}}(T)$$
+```text
+sum_{i in tail} p_i(T) > p_mode(T)
+```
 
-**Worked Synthetic Distribution.** Consider two candidate head tokens with raw probabilities $p(\text{correct}) = 0.60$ and $p(\text{distractor}) = 0.25$, with a residual tail of $50{,}000$ tokens uniformly sharing $0.15$:
+**Worked Synthetic Distribution.** Consider two candidate head tokens with raw probabilities `p(correct) = 0.60` and `p(distractor) = 0.25`, with a residual tail of `50,000` tokens uniformly sharing `0.15`:
 
-| Temperature $T$ | $p(\text{correct})$ | $p(\text{distractor})$ | Aggregate Tail Mass |
+| Temperature (T) | p(correct) | p(distractor) | Aggregate Tail Mass |
 |---:|---:|---:|---:|
 | 0.2 | 0.988 | 0.012 | 0.000 |
 | 1.0 | 0.600 | 0.250 | 0.150 |
 | 1.2 | 0.295 | 0.142 | 0.563 |
 
-At $T = 1.2$, $p(\text{correct})$ drops from $0.600$ to $0.295$, while low-probability tail tokens absorb $56.3\%$ of the total distribution mass. At $T = 0.2$, the distribution becomes near-deterministic ($p = 0.988$).
+At `T = 1.2`, `p(correct)` drops from `0.600` to `0.295`, while low-probability tail tokens absorb `56.3%` of the total distribution mass. At `T = 0.2`, the distribution becomes near-deterministic (`p = 0.988`).
 
-**Mitigation.** Top-$k$ filtering ($k = 50$) truncates the distribution to the highest 50 logits prior to renormalization, eliminating the long tail and restoring $p(\text{correct}) \approx 0.67$. Top-$p$ nucleus filtering dynamically thresholds the smallest set of tokens whose cumulative mass satisfies $\sum_{i \in S} p_i \ge p$.
+**Mitigation.** Top-k filtering (`k = 50`) truncates the distribution to the highest 50 logits prior to renormalization, eliminating the long tail and restoring `p(correct)` to approximately `0.67`. Top-p nucleus filtering dynamically thresholds the smallest set of tokens `S` whose cumulative probability mass satisfies `sum_{i in S} p_i >= p`.
 
 ## Responsible AI
 
