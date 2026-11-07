@@ -91,14 +91,14 @@ export const U5ResponsibleAI: React.FC = () => {
       <div className="absolute top-80 -left-10 w-96 h-96 ambient-glow-peach pointer-events-none -z-10 opacity-50" />
 
       {/* Header */}
-      <div className="hardware-chassis p-6 rounded-3xl relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-5">
+      <div className="hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-white/5 pb-4 sm:pb-5">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#ff8a65]/20 text-[#ff8a65] border border-[#ff8a65]/40 shadow-sm">
                 UNIT 05
               </span>
-              <h2 className="text-xl font-extrabold text-white tracking-tight">
+              <h2 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
                 RESPONSIBLE AI, GUARDRAILS &amp; HALLUCINATION AUDIT
               </h2>
             </div>
@@ -107,7 +107,7 @@ export const U5ResponsibleAI: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399] animate-pulse" />
             <span className="text-xs font-mono text-emerald-300 font-semibold tracking-wider">
               SAFETY EVALUATION ACTIVE
@@ -124,7 +124,7 @@ export const U5ResponsibleAI: React.FC = () => {
 
         {/* 1. Hallucination Audit Section */}
         <div className="mt-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-white/5 pb-3">
             <div>
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-400" />
@@ -135,14 +135,14 @@ export const U5ResponsibleAI: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <span className="text-xs text-slate-400 font-medium">Samples / Q:</span>
               <div className="flex gap-1">
                 {[1, 2, 3].map((s) => (
                   <button
                     key={s}
                     onClick={() => setSamplesPerItem(s)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                       samplesPerItem === s ? "btn-pill-magenta text-white" : "btn-pill-dark text-slate-400"
                     }`}
                   >
@@ -153,7 +153,7 @@ export const U5ResponsibleAI: React.FC = () => {
               <button
                 onClick={handleRunAudit}
                 disabled={auditing}
-                className="btn-pill-magenta text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wide flex items-center gap-2 cursor-pointer ml-2"
+                className="btn-pill-magenta text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wide flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
               >
                 {auditing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
                 <span>RUN AUDIT</span>
@@ -164,7 +164,7 @@ export const U5ResponsibleAI: React.FC = () => {
           {auditReports && (
             <div className="space-y-4 pt-2">
               <div className="hardware-recess p-2 rounded-2xl overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full min-w-[620px] text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b border-white/10 text-slate-400 font-bold">
                       <th className="py-2.5 px-3">Temperature</th>
@@ -229,7 +229,7 @@ export const U5ResponsibleAI: React.FC = () => {
       </div>
 
       {/* 2. Real-Time Toxic Token Suppression */}
-      <div className="hardware-chassis p-6 rounded-3xl space-y-5">
+      <div className="hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-5">
         <div>
           <h3 className="text-sm font-bold text-white flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -240,8 +240,8 @@ export const U5ResponsibleAI: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-          <div className="md:col-span-6 hardware-recess p-3 rounded-2xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 sm:gap-4">
+          <div className="sm:col-span-2 md:col-span-6 hardware-recess p-3 rounded-2xl">
             <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
               Provocative Prompt
             </label>
@@ -275,7 +275,7 @@ export const U5ResponsibleAI: React.FC = () => {
               className="w-full bg-[#14101c] border border-white/10 px-2 py-1.5 rounded-xl text-xs font-mono text-center text-slate-200"
             />
           </div>
-          <div className="md:col-span-2 flex items-end">
+          <div className="sm:col-span-2 md:col-span-2 flex items-end">
             <button
               onClick={handleTestToxic}
               disabled={toxicLoading}
@@ -293,12 +293,12 @@ export const U5ResponsibleAI: React.FC = () => {
               <span className="text-xs font-bold text-rose-400 uppercase tracking-wide block mb-2">
                 Unfiltered Generation (Raw GPT-2)
               </span>
-              <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5">
+              <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5 break-words">
                 {toxicData.unfiltered}
               </p>
             </div>
             <div className="hardware-recess p-4 rounded-2xl border border-emerald-500/20">
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
                 <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">
                   Filtered (Suppression Active)
                 </span>
@@ -306,7 +306,7 @@ export const U5ResponsibleAI: React.FC = () => {
                   Peak mass removed: {(toxicData.peak_suppressed_mass * 100).toFixed(2)}%
                 </span>
               </div>
-              <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5">
+              <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5 break-words">
                 {toxicData.filtered}
               </p>
             </div>
@@ -318,8 +318,8 @@ export const U5ResponsibleAI: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Calibration */}
-        <div className="lg:col-span-7 hardware-chassis p-6 rounded-3xl space-y-4">
-          <div className="flex justify-between items-center border-b border-white/5 pb-3">
+        <div className="lg:col-span-7 hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
             <div>
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <Scale className="w-4 h-4 text-violet-400" />
@@ -332,7 +332,7 @@ export const U5ResponsibleAI: React.FC = () => {
             <button
               onClick={handleComputeCalibration}
               disabled={calibLoading}
-              className="btn-pill-magenta text-white px-4 py-2 rounded-full text-xs font-bold tracking-wide flex items-center gap-1.5 cursor-pointer"
+              className="btn-pill-magenta text-white px-4 py-2 rounded-full text-xs font-bold tracking-wide flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto"
             >
               {calibLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Scale className="w-3.5 h-3.5" />}
               <span>CALIBRATE</span>
@@ -341,9 +341,9 @@ export const U5ResponsibleAI: React.FC = () => {
 
           {calibData ? (
             <div className="space-y-4">
-              <div className="hardware-recess p-4 rounded-2xl flex flex-col justify-between">
+              <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between">
                 {/* SVG Calibration Chart with explicit axes and grid */}
-                <div className="relative w-full h-56">
+                <div className="relative w-full h-48 sm:h-56">
                   <svg className="w-full h-full select-none" viewBox="0 0 340 200">
                     <defs>
                       <filter id="neonBlur" x="-20%" y="-20%" width="140%" height="140%">
@@ -426,7 +426,7 @@ export const U5ResponsibleAI: React.FC = () => {
                 </div>
 
                 {/* Legend and Axis Descriptors */}
-                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-white/5 pt-2 mt-1">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono text-slate-400 border-t border-white/5 pt-2 mt-1">
                   <div className="flex items-center gap-3">
                     <span className="flex items-center gap-1.5">
                       <span className="w-3 h-0.5 bg-slate-400 border-b border-dashed inline-block" />
@@ -441,7 +441,7 @@ export const U5ResponsibleAI: React.FC = () => {
                 </div>
 
                 {/* Interactive Tooltip Inspector */}
-                <div className="mt-2 p-2.5 hardware-recess rounded-xl text-xs font-mono flex items-center justify-between">
+                <div className="mt-2 p-2.5 hardware-recess rounded-xl text-xs font-mono flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   {hoveredCalibBin ? (
                     <span className="text-slate-200">
                       Bin {hoveredCalibBin.bin + 1}: Conf <span className="text-violet-300 font-bold">{(hoveredCalibBin.conf * 100).toFixed(1)}%</span> &rarr; Acc <span className="text-fuchsia-400 font-bold">{(hoveredCalibBin.acc * 100).toFixed(1)}%</span> ({hoveredCalibBin.count} tokens)
@@ -450,7 +450,7 @@ export const U5ResponsibleAI: React.FC = () => {
                     <span className="text-slate-500 italic text-[11px]">Hover over any circular bin marker to inspect exact values</span>
                   )}
                   {hoveredCalibBin && (
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded self-start sm:self-auto ${
                       hoveredCalibBin.acc < hoveredCalibBin.conf
                         ? "bg-amber-950/60 text-amber-300 border border-amber-800/40"
                         : "bg-emerald-950/60 text-emerald-300 border border-emerald-800/40"
@@ -461,7 +461,7 @@ export const U5ResponsibleAI: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-3.5 hardware-recess rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 hardware-recess rounded-xl">
                 <div>
                   <span className="text-xs text-slate-300 font-medium block">Expected Calibration Error (ECE)</span>
                   <span className="text-[10px] text-slate-500 font-mono">Weighted absolute gap across all 10 confidence bins</span>
@@ -482,7 +482,7 @@ export const U5ResponsibleAI: React.FC = () => {
         </div>
 
         {/* Model Card & Governance */}
-        <div className="lg:col-span-5 hardware-chassis p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+        <div className="lg:col-span-5 hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-3">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -491,7 +491,7 @@ export const U5ResponsibleAI: React.FC = () => {
               </h3>
               <button
                 onClick={handleLoadModelCard}
-                className="text-xs text-fuchsia-400 hover:text-fuchsia-300 font-bold flex items-center gap-1"
+                className="text-xs text-fuchsia-400 hover:text-fuchsia-300 font-bold flex items-center gap-1 cursor-pointer"
               >
                 <span>{showModelCard ? 'Hide' : 'Model Card'}</span>
                 {showModelCard ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -499,7 +499,7 @@ export const U5ResponsibleAI: React.FC = () => {
             </div>
 
             <div className="hardware-recess p-2 rounded-2xl overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full min-w-[260px] text-left text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-white/10 text-slate-400 font-bold">
                     <th className="py-2 px-2">Asset</th>

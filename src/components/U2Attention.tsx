@@ -67,14 +67,14 @@ export const U2Attention: React.FC = () => {
       <div className="absolute top-80 -right-10 w-96 h-96 ambient-glow-peach pointer-events-none -z-10 opacity-50" />
 
       {/* Header */}
-      <div className="hardware-chassis p-6 rounded-3xl relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-5">
+      <div className="hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-white/5 pb-4 sm:pb-5">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#a855f7]/20 text-[#c084fc] border border-[#a855f7]/40 shadow-sm">
                 UNIT 02
               </span>
-              <h2 className="text-xl font-extrabold text-white tracking-tight">
+              <h2 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
                 MULTI-HEAD SELF-ATTENTION &amp; RECURRENT BASELINE
               </h2>
             </div>
@@ -83,7 +83,7 @@ export const U2Attention: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-violet-500 shadow-[0_0_10px_#8b5cf6] animate-pulse" />
             <span className="text-xs font-mono text-violet-300 font-semibold tracking-wider">
               EAGER ATTN HOOKS
@@ -99,11 +99,11 @@ export const U2Attention: React.FC = () => {
         )}
 
         {/* Heatmap & Attention Inspection Deck */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 mt-6">
           
           {/* Controls Column */}
-          <div className="lg:col-span-4 space-y-5">
-            <div className="hardware-recess p-4 rounded-2xl">
+          <div className="lg:col-span-4 space-y-4 sm:space-y-5">
+            <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl">
               <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
                 Prompt for Attention Hook
               </label>
@@ -115,7 +115,7 @@ export const U2Attention: React.FC = () => {
               />
             </div>
 
-            <div className="hardware-card p-5 rounded-2xl space-y-4">
+            <div className="hardware-card p-4 sm:p-5 rounded-2xl space-y-4">
               <div className="flex items-center justify-between border-b border-white/5 pb-2">
                 <span className="text-xs font-bold text-slate-300">Layer Selector</span>
                 <span className="text-xs font-mono font-bold text-violet-300 bg-[#0e0b14] px-2 py-0.5 rounded border border-white/5">
@@ -133,7 +133,7 @@ export const U2Attention: React.FC = () => {
 
               <div className="pt-2">
                 <label className="block text-xs font-bold text-slate-300 mb-2">Attention Head</label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                   <button
                     onClick={() => setHead("mean")}
                     className={`py-2 px-2 rounded-xl text-[11px] font-bold transition-all text-center ${
@@ -243,7 +243,7 @@ export const U2Attention: React.FC = () => {
                   </div>
 
                   {/* Hover Cell Inspector */}
-                  <div className="flex items-center justify-between p-3.5 hardware-recess rounded-xl text-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3.5 hardware-recess rounded-xl text-xs">
                     <div>
                       {hoveredCell ? (
                         <span className="font-mono text-slate-200">
@@ -265,7 +265,7 @@ export const U2Attention: React.FC = () => {
       </div>
 
       {/* Recurrent Baseline Perplexity Chamber */}
-      <div className="hardware-chassis p-6 rounded-3xl space-y-5">
+      <div className="hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -280,7 +280,7 @@ export const U2Attention: React.FC = () => {
           <button
             onClick={handleComputePpl}
             disabled={pplLoading}
-            className="btn-pill-magenta text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wide flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+            className="btn-pill-magenta text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wide flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
           >
             {pplLoading ? <RefreshCw className="w-4 h-4 animate-spin text-white" /> : <Database className="w-4 h-4 text-white" />}
             <span>COMPUTE PERPLEXITY</span>
@@ -289,12 +289,12 @@ export const U2Attention: React.FC = () => {
 
         {/* Options */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="hardware-recess p-4 rounded-2xl flex items-center justify-between">
+          <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <span className="text-xs font-bold text-slate-300">Evaluation Corpus</span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSource("wikitext")}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   source === "wikitext" ? "btn-pill-magenta text-white" : "btn-pill-dark text-slate-400"
                 }`}
               >
@@ -302,7 +302,7 @@ export const U2Attention: React.FC = () => {
               </button>
               <button
                 onClick={() => setSource("custom")}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   source === "custom" ? "btn-pill-magenta text-white" : "btn-pill-dark text-slate-400"
                 }`}
               >
@@ -311,14 +311,14 @@ export const U2Attention: React.FC = () => {
             </div>
           </div>
 
-          <div className="hardware-recess p-4 rounded-2xl flex items-center justify-between">
+          <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
             <span className="text-xs font-bold text-slate-300">Context Window Block Size</span>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {[64, 128, 256].map((b) => (
                 <button
                   key={b}
                   onClick={() => setBlockSize(b)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                     blockSize === b ? "btn-pill-magenta text-white" : "btn-pill-dark text-slate-400"
                   }`}
                 >

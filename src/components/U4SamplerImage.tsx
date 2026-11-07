@@ -62,14 +62,14 @@ export const U4SamplerImage: React.FC = () => {
       <div className="absolute top-80 -right-10 w-96 h-96 ambient-glow-magenta pointer-events-none -z-10 opacity-50" />
 
       {/* Header */}
-      <div className="hardware-chassis p-6 rounded-3xl relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-5">
+      <div className="hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-white/5 pb-4 sm:pb-5">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#a855f7]/20 text-[#c084fc] border border-[#a855f7]/40 shadow-sm">
                 UNIT 04
               </span>
-              <h2 className="text-xl font-extrabold text-white tracking-tight">
+              <h2 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
                 FROM-SCRATCH PYTORCH SAMPLER &amp; SD-TURBO SYNTHESIS
               </h2>
             </div>
@@ -78,7 +78,7 @@ export const U4SamplerImage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_10px_#ec4899] animate-pulse" />
             <span className="text-xs font-mono text-pink-300 font-semibold tracking-wider">
               KV-CACHE + DIFFUSERS
@@ -94,11 +94,11 @@ export const U4SamplerImage: React.FC = () => {
         )}
 
         {/* Sampler Controls Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 mt-6">
           
           {/* Controls Deck */}
-          <div className="lg:col-span-5 space-y-5">
-            <div className="hardware-recess p-4 rounded-2xl">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-5">
+            <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl">
               <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
                 Seed Prompt String
               </label>
@@ -111,13 +111,13 @@ export const U4SamplerImage: React.FC = () => {
             </div>
 
             {/* Knobs */}
-            <div className="hardware-card p-5 rounded-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-white/5 pb-2">
+            <div className="hardware-card p-4 sm:p-5 rounded-2xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-1 border-b border-white/5 pb-2">
                 <span className="text-xs font-bold text-slate-300">Sampling Knobs</span>
                 <span className="text-[10px] text-slate-400 font-mono tracking-tight">DRAG &bull; SCROLL &bull; +/- NUDGE &bull; TYPE</span>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 py-2">
+              <div className="grid grid-cols-3 gap-1 sm:gap-2 py-2">
                 <Knob
                   label="Temperature"
                   value={temperature}
@@ -169,7 +169,7 @@ export const U4SamplerImage: React.FC = () => {
                 />
               </div>
 
-              <div className="pt-2 flex items-center justify-between">
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs text-slate-400 font-medium">Random Generator Seed:</span>
                 <input
                   type="number"
@@ -196,11 +196,11 @@ export const U4SamplerImage: React.FC = () => {
           </div>
 
           {/* Generated Passage & Image Synthesis */}
-          <div className="lg:col-span-7 space-y-5">
+          <div className="lg:col-span-7 space-y-4 sm:space-y-5">
             {genResult ? (
               <>
                 {/* Text Output Deck */}
-                <div className="hardware-card p-5 rounded-2xl space-y-3">
+                <div className="hardware-card p-4 sm:p-5 rounded-2xl space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3">
                     <span className="text-xs font-bold text-white uppercase tracking-wide">
                       Autoregressive Completion
@@ -208,7 +208,7 @@ export const U4SamplerImage: React.FC = () => {
                     <button
                       onClick={handleSynthesizeImage}
                       disabled={imaging}
-                      className="btn-pill-magenta text-white px-4 py-2 rounded-full text-xs font-bold tracking-wide flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+                      className="btn-pill-magenta text-white px-4 py-2 rounded-full text-xs font-bold tracking-wide flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
                     >
                       {imaging ? (
                         <RefreshCw className="w-3.5 h-3.5 animate-spin" />
@@ -219,7 +219,7 @@ export const U4SamplerImage: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="hardware-recess p-4 rounded-xl text-xs font-mono text-slate-200 leading-relaxed border border-white/5">
+                  <div className="hardware-recess p-3.5 sm:p-4 rounded-xl text-xs font-mono text-slate-200 leading-relaxed border border-white/5 break-words">
                     <span className="text-slate-400">{genResult.prompt}</span>
                     <span className="text-fuchsia-300 font-bold ml-1">{genResult.completion}</span>
                   </div>
@@ -227,8 +227,8 @@ export const U4SamplerImage: React.FC = () => {
 
                 {/* Image Output Card */}
                 {imageData && (
-                  <div className="hardware-card p-5 rounded-2xl space-y-3">
-                    <div className="flex items-center justify-between">
+                  <div className="hardware-card p-4 sm:p-5 rounded-2xl space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="text-xs font-bold text-white flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-amber-400" />
                         {imageData.backend === 'procedural-latent-canvas' ? 'Procedural Latent Visual' : 'Neural Diffusion Synthesized Imagery'}
@@ -246,7 +246,7 @@ export const U4SamplerImage: React.FC = () => {
                       <img
                         src={imageData.image_data_url}
                         alt="synthesis visual"
-                        className="rounded-xl max-w-full h-auto max-h-[360px] shadow-2xl"
+                        className="rounded-xl max-w-full h-auto max-h-[360px] object-contain shadow-2xl"
                       />
                     </div>
 
@@ -257,7 +257,7 @@ export const U4SamplerImage: React.FC = () => {
                           <span className="text-[10px] bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/40">Fallback</span>
                         </div>
                         {imageData.remote_error ? (
-                          <div className="text-slate-300">
+                          <div className="text-slate-300 break-words">
                             Remote API status: <span className="text-amber-300 font-semibold">{imageData.remote_error}</span>
                           </div>
                         ) : (
@@ -269,14 +269,14 @@ export const U4SamplerImage: React.FC = () => {
                 )}
 
                 {/* Step Trace Table */}
-                <div className="hardware-card p-5 rounded-2xl space-y-3">
+                <div className="hardware-card p-4 sm:p-5 rounded-2xl space-y-3">
                   <span className="text-xs font-bold text-white flex items-center gap-2">
                     <Cpu className="w-4 h-4 text-fuchsia-400" />
                     Step-by-Step Autoregressive Trace
                   </span>
 
                   <div className="overflow-x-auto max-h-72 hardware-recess p-2 rounded-2xl">
-                    <table className="w-full text-left text-xs border-collapse">
+                    <table className="w-full min-w-[420px] text-left text-xs border-collapse">
                       <thead className="sticky top-0 bg-[#161220] text-slate-400 border-b border-white/10 font-bold">
                         <tr>
                           <th className="py-2 px-3">Step</th>

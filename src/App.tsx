@@ -28,7 +28,7 @@ export const App: React.FC = () => {
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} systemHealth={systemHealth} />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
           {activeTab === 0 && <U1Sampling />}
           {activeTab === 1 && <U2Attention />}
           {activeTab === 2 && <U3BertGpt />}
@@ -36,16 +36,16 @@ export const App: React.FC = () => {
           {activeTab === 4 && <U5ResponsibleAI />}
         </main>
 
-        <footer className="mt-12 py-8 border-t border-white/5 bg-[#0d0a13]/90 backdrop-blur-md text-center text-xs text-slate-500">
+        <footer className="mt-8 sm:mt-12 py-6 sm:py-8 border-t border-white/5 bg-[#0d0a13]/90 backdrop-blur-md text-center text-xs text-slate-500">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap justify-center">
               <span className="w-2 h-2 rounded-full bg-fuchsia-500 shadow-[0_0_8px_#d946ef]" />
               <span className="font-mono text-slate-400 font-bold">NEXT-TOKEN PROBABILITY LAB</span>
               <span className="text-slate-600">&bull;</span>
               <span className="text-slate-400">TRACK A &bull; PROBLEM P5</span>
             </div>
 
-            <div className="flex items-center gap-3 font-mono text-[11px] text-slate-400">
+            <div className="flex items-center gap-2 sm:gap-3 font-mono text-[10px] sm:text-[11px] text-slate-400 flex-wrap justify-center">
               <span className="px-2.5 py-1 rounded bg-[#171322] border border-white/5">PyTorch 2.x</span>
               <span className="px-2.5 py-1 rounded bg-[#171322] border border-white/5">Hugging Face Transformers</span>
             </div>

@@ -83,14 +83,14 @@ export const U1Sampling: React.FC = () => {
       <div className="absolute top-40 -right-10 w-96 h-96 ambient-glow-magenta pointer-events-none -z-10 opacity-60" />
 
       {/* Top Banner / Hardware Deck */}
-      <div className="hardware-chassis p-6 rounded-3xl relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-5">
+      <div className="hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-white/5 pb-4 sm:pb-5">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#ff8a65]/20 text-[#ff8a65] border border-[#ff8a65]/40 shadow-sm">
                 UNIT 01
               </span>
-              <h2 className="text-xl font-extrabold text-white tracking-tight">
+              <h2 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
                 PROBABILITY DISTRIBUTIONS &amp; SAMPLING ENGINES
               </h2>
             </div>
@@ -99,7 +99,7 @@ export const U1Sampling: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-fuchsia-500 shadow-[0_0_10px_#d946ef] animate-pulse" />
             <span className="text-xs font-mono text-fuchsia-300 font-semibold tracking-wider">
               GPT-2 (124M) ACTIVE
@@ -115,12 +115,12 @@ export const U1Sampling: React.FC = () => {
         )}
 
         {/* Hardware Control Console Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 mt-6">
           
           {/* Left: Interactive Prompt & Dials */}
-          <div className="lg:col-span-5 space-y-5">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-5">
             {/* Context Input Well */}
-            <div className="hardware-recess p-4 rounded-2xl">
+            <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl">
               <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
                 Context Prompt String
               </label>
@@ -134,8 +134,8 @@ export const U1Sampling: React.FC = () => {
             </div>
 
             {/* Rotary Parameter Encoders */}
-            <div className="hardware-card p-5 rounded-2xl">
-              <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+            <div className="hardware-card p-4 sm:p-5 rounded-2xl">
+              <div className="flex flex-wrap items-center justify-between gap-1 mb-4 border-b border-white/5 pb-2">
                 <span className="text-xs font-bold text-slate-300 flex items-center gap-2">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-fuchsia-400" />
                   Rotary Parameter Encoders
@@ -143,7 +143,7 @@ export const U1Sampling: React.FC = () => {
                 <span className="text-[10px] text-slate-400 font-mono tracking-tight">DRAG &bull; SCROLL &bull; +/- NUDGE &bull; TYPE</span>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 py-2">
+              <div className="grid grid-cols-3 gap-1 sm:gap-2 py-2">
                 <Knob
                   label="Temperature"
                   value={temperature}
@@ -203,36 +203,36 @@ export const U1Sampling: React.FC = () => {
           </div>
 
           {/* Right: Real-time Bar Visualizer & Metrics */}
-          <div className="lg:col-span-7 space-y-5">
-            {/* Metrics Pods */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="hardware-recess p-4 rounded-2xl relative overflow-hidden">
+          <div className="lg:col-span-7 space-y-4 sm:space-y-5">
+            {/* Metrics Pods: Single column on small screens, 3 cols on sm/desktop */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
+              <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl relative overflow-hidden">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
                   Raw Entropy H(p)
                 </span>
-                <span className="text-xl font-extrabold font-mono text-slate-200">
+                <span className="text-lg sm:text-xl font-extrabold font-mono text-slate-200">
                   {distData ? `${distData.raw_entropy_bits}` : '...'}
                 </span>
                 <span className="text-[10px] text-slate-500 block mt-0.5">bits at T=1.0</span>
               </div>
 
-              <div className="hardware-recess p-4 rounded-2xl relative overflow-hidden">
+              <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-12 h-12 bg-fuchsia-500/10 rounded-full blur-xl pointer-events-none" />
                 <span className="text-[10px] font-bold uppercase tracking-wider text-fuchsia-400 block mb-1">
                   Adjusted Entropy
                 </span>
-                <span className="text-xl font-extrabold font-mono text-fuchsia-300">
+                <span className="text-lg sm:text-xl font-extrabold font-mono text-fuchsia-300">
                   {distData ? `${distData.adjusted_entropy_bits}` : '...'}
                 </span>
                 <span className="text-[10px] text-slate-500 block mt-0.5">post-sampling bits</span>
               </div>
 
-              <div className="hardware-recess p-4 rounded-2xl relative overflow-hidden">
+              <div className="hardware-recess p-3.5 sm:p-4 rounded-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-12 h-12 bg-amber-500/10 rounded-full blur-xl pointer-events-none" />
                 <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">
                   Kept Candidates
                 </span>
-                <span className="text-xl font-extrabold font-mono text-amber-300">
+                <span className="text-lg sm:text-xl font-extrabold font-mono text-amber-300">
                   {distData ? distData.kept_candidates.toLocaleString() : '...'}
                 </span>
                 <span className="text-[10px] text-slate-500 block mt-0.5">tokens (p &gt; 0)</span>
@@ -240,8 +240,8 @@ export const U1Sampling: React.FC = () => {
             </div>
 
             {/* Probability Visualizer Chamber */}
-            <div className="hardware-card p-5 rounded-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="hardware-card p-4 sm:p-5 rounded-2xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3">
                 <span className="text-xs font-bold text-slate-200 flex items-center gap-2">
                   <Activity className="w-3.5 h-3.5 text-fuchsia-400" />
                   Top Next-Token Probabilities
@@ -270,11 +270,11 @@ export const U1Sampling: React.FC = () => {
                     const maxProb = Math.max(...distData.raw_probs, ...distData.adjusted_probs, 0.01);
                     return (
                       <div key={i} className="text-xs p-2 rounded-xl bg-[#14101c]/70 border border-white/5 hover:border-fuchsia-500/30 transition-all">
-                        <div className="flex justify-between items-center mb-1.5">
+                        <div className="flex flex-wrap justify-between items-center gap-1.5 mb-1.5">
                           <span className="font-mono font-bold text-white bg-[#221c2e] px-2 py-0.5 rounded-md border border-white/10 shadow-sm">
                             {tok}
                           </span>
-                          <div className="space-x-3 font-mono text-[11px]">
+                          <div className="flex items-center gap-2 sm:gap-3 font-mono text-[10px] sm:text-[11px]">
                             <span className="text-slate-500">Raw: {(rawP * 100).toFixed(1)}%</span>
                             <span className="text-fuchsia-300 font-bold">Adj: {(adjP * 100).toFixed(1)}%</span>
                           </div>
@@ -381,7 +381,7 @@ export const U1Sampling: React.FC = () => {
             <button
               onClick={handleGenerateBoth}
               disabled={generating}
-              className="btn-pill-magenta text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wide flex items-center justify-center gap-2.5 cursor-pointer"
+              className="btn-pill-magenta text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wide flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto"
             >
               {generating ? (
                 <RefreshCw className="w-4 h-4 animate-spin text-white" />
@@ -401,7 +401,7 @@ export const U1Sampling: React.FC = () => {
                   </span>
                   <span className="text-[10px] font-mono text-slate-500">Low Entropy</span>
                 </div>
-                <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5">
+                <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5 break-words">
                   {compareData.text_low}
                 </p>
               </div>
@@ -413,7 +413,7 @@ export const U1Sampling: React.FC = () => {
                   </span>
                   <span className="text-[10px] font-mono text-slate-500">Tail Inflation</span>
                 </div>
-                <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5">
+                <p className="text-xs font-mono text-slate-200 leading-relaxed bg-[#14101c] p-3 rounded-xl border border-white/5 break-words">
                   {compareData.text_high}
                 </p>
               </div>
@@ -431,13 +431,13 @@ export const U1Sampling: React.FC = () => {
 
       {/* Architecture & Flow Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-6 hardware-chassis p-6 rounded-3xl space-y-3">
+        <div className="lg:col-span-6 hardware-chassis p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-3">
           <h3 className="text-sm font-bold text-white flex items-center gap-2">
             <Layers className="w-4 h-4 text-fuchsia-400" />
             Generative vs Discriminative Architecture
           </h3>
           <div className="overflow-x-auto hardware-recess p-2 rounded-2xl">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full min-w-[460px] text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-white/10 text-slate-400 font-bold">
                   <th className="py-2.5 px-3">Aspect</th>
