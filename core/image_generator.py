@@ -53,13 +53,11 @@ class ImageGenerator:
         prompt = build_image_prompt(prompt)
         remote_error: Optional[str] = None
         token = os.getenv("HF_TOKEN")
-        if token and token.strip():
-            try:
-                return self._generate_remote(prompt, token.strip()), "huggingface-inference-api", None
-            except Exception as error:
-                remote_error = str(error)
-        else:
-            remote_error = "HF_TOKEN not set on server"
+        clean_token = token.strip() if (token and token.strip()) else None
+        try:
+            return self._generate_remote(prompt, clean_token, seed=seed), "huggingface-inference-api", None
+        except Exception as error:
+            remote_error = str(error)
 
         try:
             return self._generate_local(prompt, seed), "local-diffusers", remote_error
@@ -67,48 +65,79 @@ class ImageGenerator:
             # Serverless fallback when local diffusion pipeline is unavailable
             return self._generate_procedural(prompt, seed), "procedural-latent-canvas", remote_error
 
-    def _generate_remote(self, prompt: str, token: str) -> Image.Image:
-        """Call the Hugging Face Inference API direct router endpoint."""
+    def _generate_remote(self, prompt: str, token: Optional[str], seed: int = 0) -> Image.Image:
+        """Call Hugging Face Inference Providers and official Hugging Face Spaces endpoints."""
         import io
         import json
         import urllib.request
         from PIL import Image
 
-        models = [
-            self.model_id,
-            "black-forest-labs/FLUX.1-schnell",
-            "stabilityai/stable-diffusion-xl-base-1.0",
-            "runwayml/stable-diffusion-v1-5",
-        ]
-        payload = json.dumps({"inputs": prompt}).encode("utf-8")
         last_error: Optional[Exception] = None
 
-        for model in models:
-            url = f"https://router.huggingface.co/hf-inference/models/{model}"
-            req = urllib.request.Request(
-                url,
-                data=payload,
-                headers={
-                    "Authorization": f"Bearer {token}",
-                    "Content-Type": "application/json",
-                    "User-Agent": "NextTokenLab/1.0",
-                },
-            )
-            try:
-                with urllib.request.urlopen(req, timeout=35) as resp:
-                    data = resp.read()
-                    if data.startswith(b"\x89PNG") or data.startswith(b"\xff\xd8") or b"JFIF" in data[:30]:
-                        return Image.open(io.BytesIO(data))
-                    try:
+        if token:
+            router_endpoints = [
+                ("https://router.huggingface.co/fal-ai/fal-ai/flux/schnell", {"prompt": prompt}),
+                ("https://router.huggingface.co/fal-ai/fal-ai/fast-sdxl", {"prompt": prompt}),
+                (
+                    "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-3-medium-diffusers",
+                    {"inputs": prompt},
+                ),
+            ]
+            for url, body_dict in router_endpoints:
+                req = urllib.request.Request(
+                    url,
+                    data=json.dumps(body_dict).encode("utf-8"),
+                    headers={
+                        "Authorization": f"Bearer {token}",
+                        "Content-Type": "application/json",
+                        "User-Agent": "NextTokenLab/1.0",
+                    },
+                )
+                try:
+                    with urllib.request.urlopen(req, timeout=30) as resp:
+                        data = resp.read()
+                        if data.startswith(b"\x89PNG") or data.startswith(b"\xff\xd8") or b"JFIF" in data[:30] or b"WEBP" in data[:30]:
+                            return Image.open(io.BytesIO(data)).convert("RGB")
                         info = json.loads(data.decode("utf-8"))
-                        if "error" in info:
-                            raise RuntimeError(info["error"])
-                    except Exception:
-                        pass
-            except urllib.error.HTTPError as e:
-                body = e.read().decode("utf-8", errors="ignore")
-                last_error = RuntimeError(f"{model} HTTP {e.code}: {body[:100]}")
-                continue
+                        if isinstance(info, dict) and "images" in info and info["images"]:
+                            img_url = info["images"][0]["url"]
+                            with urllib.request.urlopen(img_url, timeout=20) as img_resp:
+                                return Image.open(io.BytesIO(img_resp.read())).convert("RGB")
+                        if isinstance(info, dict) and "error" in info:
+                            raise RuntimeError(str(info["error"]))
+                except urllib.error.HTTPError as e:
+                    err_text = e.read().decode("utf-8", errors="ignore")
+                    last_error = RuntimeError(f"HTTP {e.code}: {err_text[:100]}")
+                    continue
+                except Exception as e:
+                    last_error = e
+                    continue
+
+        space_url = "https://black-forest-labs-flux-1-schnell.hf.space/gradio_api/call/infer"
+        space_payload = json.dumps(
+            {"data": [prompt, abs(int(seed)) % 2147483647, False, self.size, self.size, 4]}
+        ).encode("utf-8")
+
+        auth_variants = [token, None] if token else [None]
+        for auth_tok in auth_variants:
+            headers = {"Content-Type": "application/json", "User-Agent": "NextTokenLab/1.0"}
+            if auth_tok:
+                headers["Authorization"] = f"Bearer {auth_tok}"
+            try:
+                req = urllib.request.Request(space_url, data=space_payload, headers=headers)
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    event_id = json.loads(resp.read().decode("utf-8"))["event_id"]
+                stream_req = urllib.request.Request(f"{space_url}/{event_id}", headers=headers)
+                with urllib.request.urlopen(stream_req, timeout=35) as stream:
+                    for raw_line in stream:
+                        line = raw_line.decode("utf-8", errors="ignore").strip()
+                        if line.startswith("data: "):
+                            payload_data = json.loads(line[6:])
+                            if isinstance(payload_data, list) and payload_data and isinstance(payload_data[0], dict):
+                                file_url = payload_data[0].get("url")
+                                if file_url:
+                                    with urllib.request.urlopen(file_url, timeout=20) as img_resp:
+                                        return Image.open(io.BytesIO(img_resp.read())).convert("RGB")
             except Exception as e:
                 last_error = e
                 continue
