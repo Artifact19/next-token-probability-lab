@@ -15,6 +15,8 @@ from pydantic import BaseModel, Field
 
 if os.getenv("VERCEL"):
     os.environ.setdefault("HF_HOME", "/tmp/hf")
+    os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
+    os.environ.setdefault("HF_HUB_ENABLE_HF_TRANSFER", "0")
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:

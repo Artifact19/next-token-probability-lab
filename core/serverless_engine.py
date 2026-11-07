@@ -1,15 +1,18 @@
 """Lightweight NumPy + safetensors inference engine for serverless environments without PyTorch."""
 from __future__ import annotations
 
+import gc
 import math
+import os
 import re
 import unicodedata
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Sequence, Set, Tuple
 
 import numpy as np
-from huggingface_hub import hf_hub_download
+import safetensors.numpy
 from safetensors import safe_open
 from tokenizers import Tokenizer
 
@@ -138,6 +141,49 @@ class DistributionSnapshotNP:
     kept_candidates: int
 
 
+def _load_model_weights(model_name: str) -> Dict[str, np.ndarray]:
+    """Load model weights into memory without exceeding serverless disk quotas."""
+    import glob
+
+    clean_name = model_name.replace("/", "--")
+    cache_dirs = [
+        os.path.expanduser(f"~/.cache/huggingface/hub/models--{clean_name}/snapshots"),
+        os.path.expanduser(f"~/.cache/huggingface/hub/models--openai-community--{clean_name}/snapshots"),
+    ]
+    for cdir in cache_dirs:
+        matches = glob.glob(os.path.join(cdir, "**", "model.safetensors"), recursive=True)
+        if matches and os.path.exists(matches[0]):
+            weights: Dict[str, np.ndarray] = {}
+            with safe_open(matches[0], framework="np") as f:
+                for k in f.keys():
+                    weights[k] = f.get_tensor(k)
+            return weights
+
+    url = f"https://huggingface.co/{model_name}/resolve/main/model.safetensors"
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
+    )
+    with urllib.request.urlopen(req, timeout=90) as resp:
+        chunks = []
+        while True:
+            chunk = resp.read(16 * 1024 * 1024)
+            if not chunk:
+                break
+            chunks.append(chunk)
+        raw_bytes = b"".join(chunks)
+        del chunks
+
+    tensors = safetensors.numpy.load(raw_bytes)
+    del raw_bytes
+    gc.collect()
+
+    weights = {k: v for k, v in tensors.items()}
+    del tensors
+    gc.collect()
+    return weights
+
+
 class _TokenizerWrapper:
     """Adapter matching the subset of HuggingFace PreTrainedTokenizerFast used by the API."""
 
@@ -171,11 +217,7 @@ class ServerlessGPT2Engine:
         self.model_name = model_name
         self.device = "cpu"
         self.tokenizer = _TokenizerWrapper(model_name)
-        path = hf_hub_download(model_name, "model.safetensors")
-        self.w: Dict[str, np.ndarray] = {}
-        with safe_open(path, framework="np") as f:
-            for k in f.keys():
-                self.w[k] = f.get_tensor(k)
+        self.w = _load_model_weights(model_name)
         self.n_layer = 12
         self.n_head = 12
         self.d_head = 64
@@ -365,11 +407,7 @@ class ServerlessBertEngine:
     def __init__(self, model_name: str = "bert-base-uncased") -> None:
         self.model_name = model_name
         self.tokenizer = _TokenizerWrapper(model_name)
-        path = hf_hub_download(model_name, "model.safetensors")
-        self.w: Dict[str, np.ndarray] = {}
-        with safe_open(path, framework="np") as f:
-            for k in f.keys():
-                self.w[k] = f.get_tensor(k)
+        self.w = _load_model_weights(model_name)
         self.n_layer = 12
         self.n_head = 12
         self.d_head = 64
