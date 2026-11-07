@@ -19,6 +19,7 @@ export const U5ResponsibleAI: React.FC = () => {
 
   const [modelCardContent, setModelCardContent] = useState<string | null>(null);
   const [showModelCard, setShowModelCard] = useState(false);
+  const [hoveredCalibBin, setHoveredCalibBin] = useState<{ bin: number; conf: number; acc: number; count: number } | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -340,32 +341,131 @@ export const U5ResponsibleAI: React.FC = () => {
 
           {calibData ? (
             <div className="space-y-4">
-              <div className="hardware-recess p-4 rounded-2xl h-56 flex flex-col justify-between">
-                <div className="relative w-full h-40 flex items-end">
-                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <line x1="0" y1="100" x2="100" y2="0" stroke="#64748b" strokeWidth="1" strokeDasharray="3 3" />
+              <div className="hardware-recess p-4 rounded-2xl flex flex-col justify-between">
+                {/* SVG Calibration Chart with explicit axes and grid */}
+                <div className="relative w-full h-56">
+                  <svg className="w-full h-full select-none" viewBox="0 0 340 200">
+                    <defs>
+                      <filter id="neonBlur" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#d946ef" floodOpacity="0.6" />
+                      </filter>
+                    </defs>
+
+                    {/* Horizontal grid lines and Y-axis labels */}
+                    {[0, 0.25, 0.5, 0.75, 1.0].map((tick) => {
+                      const y = 165 - tick * 150;
+                      return (
+                        <g key={tick}>
+                          <line x1="42" y1={y} x2="325" y2={y} stroke="rgba(255,255,255,0.06)" strokeDasharray="2 3" />
+                          <text x="35" y={y + 3} textAnchor="end" fill="#64748b" fontSize="9" fontFamily="monospace">
+                            {Math.round(tick * 100)}%
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Vertical grid lines and X-axis labels */}
+                    {[0, 0.2, 0.4, 0.6, 0.8, 1.0].map((tick) => {
+                      const x = 42 + tick * 283;
+                      return (
+                        <g key={tick}>
+                          <line x1={x} y1="15" x2={x} y2="165" stroke="rgba(255,255,255,0.06)" strokeDasharray="2 3" />
+                          <text x={x} y="180" textAnchor="middle" fill="#64748b" fontSize="9" fontFamily="monospace">
+                            {tick.toFixed(1)}
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Ideal calibration diagonal y = x */}
+                    <line x1="42" y1="165" x2="325" y2="15" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.6" />
+
+                    {/* Polyline and interactive points for bins */}
                     {(() => {
-                      const points = calibData.bin_conf
-                        .map((conf, i) => {
-                          if (calibData.bin_count[i] === 0) return null;
-                          const acc = calibData.bin_acc[i];
-                          return `${conf * 100},${100 - acc * 100}`;
-                        })
-                        .filter(Boolean)
-                        .join(' ');
-                      return <polyline fill="none" stroke="#d946ef" strokeWidth="2.5" points={points} filter="drop-shadow(0 0 4px #d946ef)" />;
+                      const validBins: { i: number; cx: number; cy: number; conf: number; acc: number; count: number }[] = [];
+                      calibData.bin_conf.forEach((conf, i) => {
+                        const count = calibData.bin_count[i];
+                        if (count > 0) {
+                          const cx = 42 + Math.min(Math.max(conf, 0), 1) * 283;
+                          const cy = 165 - Math.min(Math.max(calibData.bin_acc[i], 0), 1) * 150;
+                          validBins.push({ i, cx, cy, conf, acc: calibData.bin_acc[i], count });
+                        }
+                      });
+
+                      const pointsStr = validBins.map((b) => `${b.cx.toFixed(1)},${b.cy.toFixed(1)}`).join(" ");
+
+                      return (
+                        <>
+                          <polyline fill="none" stroke="#d946ef" strokeWidth="2.5" points={pointsStr} filter="url(#neonBlur)" />
+
+                          {validBins.map((b) => {
+                            const isHovered = hoveredCalibBin?.bin === b.i;
+                            return (
+                              <g
+                                key={b.i}
+                                className="cursor-pointer"
+                                onMouseEnter={() => setHoveredCalibBin({ bin: b.i, conf: b.conf, acc: b.acc, count: b.count })}
+                                onMouseLeave={() => setHoveredCalibBin(null)}
+                              >
+                                <circle
+                                  cx={b.cx}
+                                  cy={b.cy}
+                                  r={isHovered ? 6 : 4}
+                                  fill={isHovered ? "#ffffff" : "#d946ef"}
+                                  stroke="#0e0b14"
+                                  strokeWidth="2"
+                                  className="transition-all duration-150"
+                                />
+                              </g>
+                            );
+                          })}
+                        </>
+                      );
                     })()}
                   </svg>
                 </div>
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>0.0 (Overconfidence)</span>
-                  <span>Confidence vs Accuracy</span>
-                  <span>1.0 (Underconfidence)</span>
+
+                {/* Legend and Axis Descriptors */}
+                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-white/5 pt-2 mt-1">
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-3 h-0.5 bg-slate-400 border-b border-dashed inline-block" />
+                      <span>Ideal (y = x)</span>
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-fuchsia-500 shadow-[0_0_6px_#d946ef] inline-block" />
+                      <span className="text-fuchsia-300 font-bold">GPT-2 Empirical</span>
+                    </span>
+                  </div>
+                  <span className="text-slate-500 text-[10px]">X: Top-1 Confidence &bull; Y: Empirical Accuracy</span>
+                </div>
+
+                {/* Interactive Tooltip Inspector */}
+                <div className="mt-2 p-2.5 hardware-recess rounded-xl text-xs font-mono flex items-center justify-between">
+                  {hoveredCalibBin ? (
+                    <span className="text-slate-200">
+                      Bin {hoveredCalibBin.bin + 1}: Conf <span className="text-violet-300 font-bold">{(hoveredCalibBin.conf * 100).toFixed(1)}%</span> &rarr; Acc <span className="text-fuchsia-400 font-bold">{(hoveredCalibBin.acc * 100).toFixed(1)}%</span> ({hoveredCalibBin.count} tokens)
+                    </span>
+                  ) : (
+                    <span className="text-slate-500 italic text-[11px]">Hover over any circular bin marker to inspect exact values</span>
+                  )}
+                  {hoveredCalibBin && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                      hoveredCalibBin.acc < hoveredCalibBin.conf
+                        ? "bg-amber-950/60 text-amber-300 border border-amber-800/40"
+                        : "bg-emerald-950/60 text-emerald-300 border border-emerald-800/40"
+                    }`}>
+                      {hoveredCalibBin.acc < hoveredCalibBin.conf ? "Overconfident" : "Underconfident"}
+                    </span>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center justify-between p-3.5 hardware-recess rounded-xl">
-                <span className="text-xs text-slate-300 font-medium">Expected Calibration Error (ECE):</span>
+                <div>
+                  <span className="text-xs text-slate-300 font-medium block">Expected Calibration Error (ECE)</span>
+                  <span className="text-[10px] text-slate-500 font-mono">Weighted absolute gap across all 10 confidence bins</span>
+                </div>
                 <span className="text-lg font-mono font-extrabold text-fuchsia-400">
                   {calibData.ece.toFixed(4)}
                 </span>
