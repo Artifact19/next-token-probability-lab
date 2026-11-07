@@ -14,6 +14,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+# Serverless filesystem is read-only except /tmp
+if os.getenv("VERCEL"):
+    os.environ.setdefault("HF_HOME", "/tmp/hf")
+
 # Ensure repo root is on sys.path
 import sys
 ROOT_DIR = Path(__file__).resolve().parent.parent
