@@ -251,8 +251,18 @@ export const U4SamplerImage: React.FC = () => {
                     </div>
 
                     {imageData.backend === 'procedural-latent-canvas' && (
-                      <div className="p-3 bg-[#161122] border border-amber-500/20 rounded-xl text-[11px] text-amber-200/90 font-mono flex items-center justify-between">
-                        <span>Offline procedural visual mode. To generate photorealistic diffusion images, add HF_TOKEN to Vercel Environment Variables and redeploy.</span>
+                      <div className="p-3 bg-[#161122] border border-amber-500/20 rounded-xl text-[11px] text-amber-200/90 font-mono space-y-1">
+                        <div className="flex items-center justify-between font-bold text-amber-300">
+                          <span>Offline Procedural Visual Mode Active</span>
+                          <span className="text-[10px] bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/40">Fallback</span>
+                        </div>
+                        {imageData.remote_error ? (
+                          <div className="text-slate-300">
+                            Remote API status: <span className="text-amber-300 font-semibold">{imageData.remote_error}</span>
+                          </div>
+                        ) : (
+                          <div>To generate neural diffusion photos, add HF_TOKEN to Vercel Environment Variables and redeploy.</div>
+                        )}
                       </div>
                     )}
                   </div>

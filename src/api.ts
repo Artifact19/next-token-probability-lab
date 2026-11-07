@@ -66,6 +66,7 @@ export interface GenerateResponse {
 export interface ImageSynthResponse {
   image_data_url: string;
   backend: string;
+  remote_error?: string | null;
 }
 
 export interface AuditReport {

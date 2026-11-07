@@ -40,7 +40,7 @@ class ImageGenerator:
         self.size = size
         self._pipeline: Optional[Any] = None
 
-    def generate(self, prompt: str, seed: int = 0) -> Tuple[Image.Image, str]:
+    def generate(self, prompt: str, seed: int = 0) -> Tuple[Image.Image, str, Optional[str]]:
         """Synthesise an image, preferring the remote API when HF_TOKEN is set.
 
         Args:
@@ -48,52 +48,74 @@ class ImageGenerator:
             seed: Seed for the local diffusion noise generator.
 
         Returns:
-            Tuple of (PIL image, backend label 'huggingface-inference-api' or 'local-diffusers').
-
-        Raises:
-            ImageGenerationError: If every available backend fails.
+            Tuple of (PIL image, backend label, remote error detail if any).
         """
         prompt = build_image_prompt(prompt)
-        remote_error: Optional[Exception] = None
+        remote_error: Optional[str] = None
         token = os.getenv("HF_TOKEN")
         if token and token.strip():
             try:
-                return self._generate_remote(prompt, token.strip()), "huggingface-inference-api"
+                return self._generate_remote(prompt, token.strip()), "huggingface-inference-api", None
             except Exception as error:
-                remote_error = error
+                remote_error = str(error)
+        else:
+            remote_error = "HF_TOKEN not set on server"
 
         try:
-            return self._generate_local(prompt, seed), "local-diffusers"
+            return self._generate_local(prompt, seed), "local-diffusers", remote_error
         except Exception:
             # Serverless fallback when local diffusion pipeline is unavailable
-            return self._generate_procedural(prompt, seed), "procedural-latent-canvas"
+            return self._generate_procedural(prompt, seed), "procedural-latent-canvas", remote_error
 
     def _generate_remote(self, prompt: str, token: str) -> Image.Image:
-        """Call the Hugging Face Inference API text-to-image endpoint."""
-        from huggingface_hub import InferenceClient
+        """Call the Hugging Face Inference API direct router endpoint."""
+        import io
+        import json
+        import urllib.request
+        from PIL import Image
 
-        candidates = [
-            ("black-forest-labs/FLUX.1-schnell", "fal-ai"),
-            ("black-forest-labs/FLUX.1-schnell", "hf-inference"),
-            ("black-forest-labs/FLUX.1-schnell", None),
-            (self.model_id, "hf-inference"),
-            (self.model_id, None),
-            ("stabilityai/stable-diffusion-xl-base-1.0", "fal-ai"),
-            ("stabilityai/stable-diffusion-xl-base-1.0", "hf-inference"),
-            ("stabilityai/stable-diffusion-xl-base-1.0", None),
+        models = [
+            self.model_id,
+            "black-forest-labs/FLUX.1-schnell",
+            "stabilityai/stable-diffusion-xl-base-1.0",
+            "runwayml/stable-diffusion-v1-5",
         ]
+        payload = json.dumps({"inputs": prompt}).encode("utf-8")
         last_error: Optional[Exception] = None
-        for model_id, provider in candidates:
+
+        for model in models:
+            url = f"https://router.huggingface.co/hf-inference/models/{model}"
+            req = urllib.request.Request(
+                url,
+                data=payload,
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                    "User-Agent": "NextTokenLab/1.0",
+                },
+            )
             try:
-                kwargs = {"provider": provider} if provider else {}
-                client = InferenceClient(model=model_id, api_key=token, timeout=25, **kwargs)
-                return client.text_to_image(prompt)
+                with urllib.request.urlopen(req, timeout=35) as resp:
+                    data = resp.read()
+                    if data.startswith(b"\x89PNG") or data.startswith(b"\xff\xd8") or b"JFIF" in data[:30]:
+                        return Image.open(io.BytesIO(data))
+                    try:
+                        info = json.loads(data.decode("utf-8"))
+                        if "error" in info:
+                            raise RuntimeError(info["error"])
+                    except Exception:
+                        pass
+            except urllib.error.HTTPError as e:
+                body = e.read().decode("utf-8", errors="ignore")
+                last_error = RuntimeError(f"{model} HTTP {e.code}: {body[:100]}")
+                continue
             except Exception as e:
                 last_error = e
                 continue
+
         if last_error:
             raise last_error
-        raise RuntimeError("No inference client provider available")
+        raise RuntimeError("No inference response from Hugging Face")
 
     def _generate_procedural(self, prompt: str, seed: int = 0) -> Image.Image:
         """Procedural latent-space visualization synthesized from prompt semantics and seed."""

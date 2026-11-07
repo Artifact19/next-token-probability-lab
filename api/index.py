@@ -386,16 +386,15 @@ def u4_generate(req: GenerateRequest):
 def u4_image(req: ImageSynthRequest):
     try:
         gen = get_img_gen()
-        image, backend = gen.generate(req.text, seed=req.seed)
+        image, backend, remote_error = gen.generate(req.text, seed=req.seed)
         buffered = io.BytesIO()
         image.save(buffered, format="PNG")
         img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
         return {
             "image_data_url": f"data:image/png;base64,{img_str}",
             "backend": backend,
+            "remote_error": remote_error,
         }
-    except ImageGenerationError as e:
-        raise HTTPException(status_code=503, detail=f"Image generation failed: {e}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

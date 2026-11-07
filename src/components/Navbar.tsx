@@ -68,18 +68,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, systemH
           </div>
 
           {/* Right Status LED Indicators */}
-          <div className="hidden lg:flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#120f18] border border-white/5 shadow-inner">
-              <span className={`w-2 h-2 rounded-full ${systemHealth?.has_hf_token ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : "bg-amber-400 shadow-[0_0_8px_#fbbf24]"}`} />
-              <span className="text-[11px] font-mono text-slate-400 font-medium">HF Token:</span>
+          <div className="hidden lg:flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#120f18] border border-white/5 shadow-inner whitespace-nowrap">
+              <span className={`w-2 h-2 rounded-full shrink-0 ${systemHealth?.has_hf_token ? "bg-emerald-400 shadow-[0_0_8px_#34d399]" : "bg-amber-400 shadow-[0_0_8px_#fbbf24]"}`} />
+              <span className="text-[11px] font-mono text-slate-400">HF:</span>
               <span className={`text-[11px] font-mono font-bold ${systemHealth?.has_hf_token ? "text-emerald-300" : "text-amber-300"}`}>
-                {systemHealth?.has_hf_token ? "DETECTED" : "NOT SET"}
+                {systemHealth?.has_hf_token ? "CONNECTED" : "OFFLINE"}
               </span>
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#120f18] border border-white/5 shadow-inner">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-              <span className="text-[11px] font-mono text-slate-400 font-medium">Device:</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#120f18] border border-white/5 shadow-inner whitespace-nowrap">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] shrink-0" />
+              <span className="text-[11px] font-mono text-slate-400">DEVICE:</span>
               <span className="text-[11px] font-mono font-bold text-slate-200">
                 {systemHealth?.device?.toUpperCase() || 'CPU'}
               </span>
