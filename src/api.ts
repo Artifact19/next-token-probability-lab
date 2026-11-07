@@ -1,6 +1,6 @@
 // API Client for Next-Token Probability Lab
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
 
 export interface DistributionResponse {
   tokens: string[];
