@@ -9,7 +9,7 @@ import { api } from './api';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [systemHealth, setSystemHealth] = useState<{ status: string; device: string } | null>(null);
+  const [systemHealth, setSystemHealth] = useState<{ status: string; device: string; has_hf_token?: boolean } | null>(null);
 
   useEffect(() => {
     api.getHealth()

@@ -231,9 +231,13 @@ export const U4SamplerImage: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-white flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-amber-400" />
-                        sd-turbo Synthesized Imagery
+                        {imageData.backend === 'procedural-latent-canvas' ? 'Procedural Latent Visual' : 'Neural Diffusion Synthesized Imagery'}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-fuchsia-950/60 text-fuchsia-300 border border-fuchsia-700/50">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+                        imageData.backend === 'procedural-latent-canvas'
+                          ? 'bg-amber-950/60 text-amber-300 border-amber-700/50'
+                          : 'bg-fuchsia-950/60 text-fuchsia-300 border-fuchsia-700/50'
+                      }`}>
                         {imageData.backend}
                       </span>
                     </div>
@@ -241,10 +245,16 @@ export const U4SamplerImage: React.FC = () => {
                     <div className="hardware-recess p-2 rounded-2xl flex justify-center">
                       <img
                         src={imageData.image_data_url}
-                        alt="sd-turbo synthesis"
+                        alt="synthesis visual"
                         className="rounded-xl max-w-full h-auto max-h-[360px] shadow-2xl"
                       />
                     </div>
+
+                    {imageData.backend === 'procedural-latent-canvas' && (
+                      <div className="p-3 bg-[#161122] border border-amber-500/20 rounded-xl text-[11px] text-amber-200/90 font-mono flex items-center justify-between">
+                        <span>Offline procedural visual mode. To generate photorealistic diffusion images, add HF_TOKEN to Vercel Environment Variables and redeploy.</span>
+                      </div>
+                    )}
                   </div>
                 )}
 

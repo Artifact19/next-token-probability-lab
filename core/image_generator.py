@@ -73,17 +73,20 @@ class ImageGenerator:
         from huggingface_hub import InferenceClient
 
         candidates = [
-            (self.model_id, "hf-inference"),
-            (self.model_id, None),
+            ("black-forest-labs/FLUX.1-schnell", "fal-ai"),
             ("black-forest-labs/FLUX.1-schnell", "hf-inference"),
             ("black-forest-labs/FLUX.1-schnell", None),
+            (self.model_id, "hf-inference"),
+            (self.model_id, None),
+            ("stabilityai/stable-diffusion-xl-base-1.0", "fal-ai"),
             ("stabilityai/stable-diffusion-xl-base-1.0", "hf-inference"),
+            ("stabilityai/stable-diffusion-xl-base-1.0", None),
         ]
         last_error: Optional[Exception] = None
         for model_id, provider in candidates:
             try:
                 kwargs = {"provider": provider} if provider else {}
-                client = InferenceClient(model=model_id, token=token, timeout=25, **kwargs)
+                client = InferenceClient(model=model_id, api_key=token, timeout=25, **kwargs)
                 return client.text_to_image(prompt)
             except Exception as e:
                 last_error = e
