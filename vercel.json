@@ -1,4 +1,5 @@
 {
+  "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
@@ -15,7 +16,7 @@
     "api/index.py": {
       "maxDuration": 60,
       "memory": 2048,
-      "excludeFiles": "{tests/**,results/**,*.pt,node_modules/**,src/**}"
+      "excludeFiles": "{.venv/**,tests/**,results/**,*.pt,node_modules/**,src/**}"
     }
   }
 }

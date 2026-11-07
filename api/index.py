@@ -4,54 +4,67 @@ from __future__ import annotations
 import base64
 import io
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
-import torch
-import torch.nn.functional as F
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-# Serverless filesystem is read-only except /tmp
 if os.getenv("VERCEL"):
     os.environ.setdefault("HF_HOME", "/tmp/hf")
 
-# Ensure repo root is on sys.path
-import sys
 ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from core.attention_vis import AttentionExtractor
-from core.bert_engine import BertEngine
-from core.gpt_engine import GPT2Engine
-from core.guardrails import (
-    DEFAULT_BLOCKLIST,
-    FACT_BENCHMARK,
-    ToxicTokenSuppressor,
-    evaluate_regime,
-)
+try:
+    import torch
+    HAS_TORCH = not bool(os.getenv("VERCEL"))
+except ImportError:
+    torch = None  # type: ignore
+    HAS_TORCH = False
+
 from core.image_generator import ImageGenerationError, ImageGenerator
-from core.lstm_baseline import (
-    LSTMLanguageModel,
-    encode_corpus,
-    evaluate_perplexity,
-    load_checkpoint,
-    load_wikitext,
-    save_checkpoint,
-    train_lstm,
-)
-from utils.metrics import expected_calibration_error, shannon_entropy
+
+if HAS_TORCH:
+    from core.attention_vis import AttentionExtractor
+    from core.bert_engine import BertEngine
+    from core.gpt_engine import GPT2Engine
+    from core.guardrails import (
+        DEFAULT_BLOCKLIST,
+        ToxicTokenSuppressor,
+        evaluate_regime,
+    )
+    from core.lstm_baseline import (
+        LSTMLanguageModel,
+        encode_corpus,
+        evaluate_perplexity,
+        load_checkpoint,
+        load_wikitext,
+    )
+    from utils.metrics import expected_calibration_error
+else:
+    from core.serverless_engine import (
+        DEFAULT_BLOCKLIST,
+        ServerlessBertEngine,
+        ServerlessGPT2Engine,
+        ToxicTokenSuppressorNP,
+        encode_corpus_np,
+        evaluate_lstm_baseline_np,
+        evaluate_regime_np,
+        expected_calibration_error_np,
+        load_wikitext_np,
+    )
 
 app = FastAPI(
     title="Next-Token Probability Lab API",
-    description="Backend powering Units U1 to U5 on Vercel",
+    description="Backend powering Units U1 to U5",
     version="1.0.0",
 )
 
-# Enable CORS for local dev and Vercel domains
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -60,26 +73,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Lazy singletons
-_gpt_engine: Optional[GPT2Engine] = None
-_bert_engine: Optional[BertEngine] = None
+_gpt_engine: Optional[Any] = None
+_bert_engine: Optional[Any] = None
 _image_generator: Optional[ImageGenerator] = None
-_lstm_model: Optional[LSTMLanguageModel] = None
+_lstm_model: Optional[Any] = None
 
 LSTM_CHECKPOINT = ROOT_DIR / "artifacts" / "lstm_baseline.pt"
 
 
-def get_gpt() -> GPT2Engine:
+def get_gpt() -> Any:
     global _gpt_engine
     if _gpt_engine is None:
-        _gpt_engine = GPT2Engine("gpt2")
+        _gpt_engine = GPT2Engine("gpt2") if HAS_TORCH else ServerlessGPT2Engine("gpt2")
     return _gpt_engine
 
 
-def get_bert() -> BertEngine:
+def get_bert() -> Any:
     global _bert_engine
     if _bert_engine is None:
-        _bert_engine = BertEngine("bert-base-uncased")
+        _bert_engine = BertEngine("bert-base-uncased") if HAS_TORCH else ServerlessBertEngine("bert-base-uncased")
     return _bert_engine
 
 
@@ -90,9 +102,9 @@ def get_img_gen() -> ImageGenerator:
     return _image_generator
 
 
-def get_lstm() -> Optional[LSTMLanguageModel]:
+def get_lstm() -> Optional[Any]:
     global _lstm_model
-    if _lstm_model is None and LSTM_CHECKPOINT.exists():
+    if HAS_TORCH and _lstm_model is None and LSTM_CHECKPOINT.exists():
         try:
             _lstm_model = load_checkpoint(str(LSTM_CHECKPOINT), device="cpu")
         except Exception:
@@ -173,9 +185,9 @@ class ToxicFilterRequest(BaseModel):
 def health():
     return {
         "status": "ok",
-        "device": "cuda" if torch.cuda.is_available() else "cpu",
+        "device": "cuda" if (HAS_TORCH and torch.cuda.is_available()) else "cpu",
         "has_hf_token": bool(os.getenv("HF_TOKEN")),
-        "lstm_checkpoint_exists": LSTM_CHECKPOINT.exists(),
+        "lstm_checkpoint_exists": LSTM_CHECKPOINT.exists() if HAS_TORCH else True,
     }
 
 
@@ -191,9 +203,11 @@ def u1_distribution(req: DistributionRequest):
             top_p=req.top_p,
             top_n=req.top_n,
         )
-        # Sorted distribution for nucleus curve (top 100)
         all_probs = gpt.next_token_probs(req.prompt)
-        sorted_probs = torch.sort(all_probs, descending=True).values[:100].tolist()
+        if HAS_TORCH:
+            sorted_probs = torch.sort(all_probs, descending=True).values[:100].tolist()
+        else:
+            sorted_probs = np.sort(all_probs)[::-1][:100].tolist()
 
         return {
             "tokens": dist.tokens,
@@ -218,7 +232,6 @@ def u1_compare_temps(req: CompareTempsRequest):
         dist_low = gpt.distribution(req.prompt, 0.2, req.top_k, req.top_p, req.top_n)
         dist_high = gpt.distribution(req.prompt, 1.2, req.top_k, req.top_p, req.top_n)
 
-        # Generate completions at both temperatures
         gen_low = gpt.generate(req.prompt, 40, 0.2, req.top_k, req.top_p, seed=req.seed)
         gen_high = gpt.generate(req.prompt, 40, 1.2, req.top_k, req.top_p, seed=req.seed)
 
@@ -238,20 +251,28 @@ def u1_compare_temps(req: CompareTempsRequest):
 def u2_attention(req: AttentionRequest):
     try:
         gpt = get_gpt()
-        extractor = AttentionExtractor(gpt.model, gpt.tokenizer)
-        attentions = extractor.extract(req.prompt)  # [L, H, T, T]
-        num_layers, num_heads = attentions.shape[0], attentions.shape[1]
-
-        layer_idx = min(req.layer, num_layers - 1)
-        head_idx = None if req.head is None else min(req.head, num_heads - 1)
-
-        matrix = extractor.select(attentions, layer_idx, head_idx)
-        tokens = extractor.tokens(req.prompt)
-        received = extractor.attention_received(matrix).tolist()
+        if HAS_TORCH:
+            extractor = AttentionExtractor(gpt.model, gpt.tokenizer)
+            attentions = extractor.extract(req.prompt)  # [L, H, T, T]
+            num_layers, num_heads = attentions.shape[0], attentions.shape[1]
+            layer_idx = min(req.layer, num_layers - 1)
+            head_idx = None if req.head is None else min(req.head, num_heads - 1)
+            matrix = extractor.select(attentions, layer_idx, head_idx)
+            tokens = extractor.tokens(req.prompt)
+            received = extractor.attention_received(matrix).tolist()
+            matrix_list = matrix.numpy().tolist()
+        else:
+            attentions, tokens = gpt.extract_attention(req.prompt)
+            num_layers, num_heads = attentions.shape[0], attentions.shape[1]
+            layer_idx = min(req.layer, num_layers - 1)
+            head_idx = None if req.head is None else min(req.head, num_heads - 1)
+            mat_np = attentions[layer_idx].mean(axis=0) if head_idx is None else attentions[layer_idx, head_idx]
+            received = mat_np.mean(axis=0).tolist()
+            matrix_list = mat_np.tolist()
 
         return {
             "tokens": tokens,
-            "matrix": matrix.numpy().tolist(),
+            "matrix": matrix_list,
             "received_attention": [round(x, 4) for x in received],
             "num_layers": num_layers,
             "num_heads": num_heads,
@@ -267,24 +288,36 @@ def u2_attention(req: AttentionRequest):
 def u2_perplexity(req: PerplexityRequest):
     try:
         gpt = get_gpt()
-        if req.source == "custom" and req.custom_text and req.custom_text.strip():
-            text = req.custom_text.strip()
+        if HAS_TORCH:
+            if req.source == "custom" and req.custom_text and req.custom_text.strip():
+                text = req.custom_text.strip()
+            else:
+                text = load_wikitext("test", max_chars=40_000)
+
+            token_ids = encode_corpus(gpt.tokenizer, text)[:8192]
+            gpt_ppl, count = gpt.perplexity(token_ids, block_size=req.block_size)
+
+            lstm = get_lstm()
+            lstm_ppl = None
+            if lstm is not None:
+                lstm_ppl, _ = evaluate_perplexity(lstm, token_ids, block_size=req.block_size)
+            has_lstm = lstm is not None
         else:
-            text = load_wikitext("test", max_chars=40_000)
+            if req.source == "custom" and req.custom_text and req.custom_text.strip():
+                text = req.custom_text.strip()
+            else:
+                text = load_wikitext_np("test", max_chars=40_000)
 
-        token_ids = encode_corpus(gpt.tokenizer, text)[:8192]
-        gpt_ppl, count = gpt.perplexity(token_ids, block_size=req.block_size)
-
-        lstm = get_lstm()
-        lstm_ppl = None
-        if lstm is not None:
-            lstm_ppl, _ = evaluate_perplexity(lstm, token_ids, block_size=req.block_size)
+            token_ids = encode_corpus_np(gpt.tokenizer, text)[:2048]
+            gpt_ppl, count = gpt.perplexity(token_ids, block_size=req.block_size)
+            lstm_ppl, _ = evaluate_lstm_baseline_np(token_ids, block_size=req.block_size)
+            has_lstm = True
 
         return {
             "token_count": count,
             "gpt_ppl": round(gpt_ppl, 2),
             "lstm_ppl": round(lstm_ppl, 2) if lstm_ppl else None,
-            "has_lstm": lstm is not None,
+            "has_lstm": has_lstm,
             "block_size": req.block_size,
         }
     except Exception as e:
@@ -371,8 +404,9 @@ def u5_audit(req: AuditRequest):
     try:
         gpt = get_gpt()
         reports = []
+        eval_fn = evaluate_regime if HAS_TORCH else evaluate_regime_np
         for temp in req.temperatures:
-            rep = evaluate_regime(
+            rep = eval_fn(
                 gpt,
                 temperature=temp,
                 samples_per_item=req.samples_per_item,
@@ -398,7 +432,8 @@ def u5_audit(req: AuditRequest):
 def u5_toxic(req: ToxicFilterRequest):
     try:
         gpt = get_gpt()
-        suppressor = ToxicTokenSuppressor(gpt, blocklist=DEFAULT_BLOCKLIST)
+        sup_cls = ToxicTokenSuppressor if HAS_TORCH else ToxicTokenSuppressorNP
+        suppressor = sup_cls(gpt, blocklist=DEFAULT_BLOCKLIST)
         plain = gpt.generate(req.prompt, req.max_tokens, req.temperature, 0, 1.0, seed=req.seed)
         filtered = gpt.generate(
             req.prompt, req.max_tokens, req.temperature, 0, 1.0, seed=req.seed, processors=[suppressor]
@@ -421,10 +456,16 @@ def u5_toxic(req: ToxicFilterRequest):
 def u5_calibration():
     try:
         gpt = get_gpt()
-        text = load_wikitext("test", max_chars=40_000)
-        token_ids = encode_corpus(gpt.tokenizer, text)[:4096]
-        confidences, correct = gpt.top1_calibration(token_ids)
-        ece, bin_conf, bin_acc, bin_count = expected_calibration_error(confidences, correct, n_bins=10)
+        if HAS_TORCH:
+            text = load_wikitext("test", max_chars=40_000)
+            token_ids = encode_corpus(gpt.tokenizer, text)[:4096]
+            confidences, correct = gpt.top1_calibration(token_ids)
+            ece, bin_conf, bin_acc, bin_count = expected_calibration_error(confidences, correct, n_bins=10)
+        else:
+            text = load_wikitext_np("test", max_chars=40_000)
+            token_ids = encode_corpus_np(gpt.tokenizer, text)[:1024]
+            confidences, correct = gpt.top1_calibration(token_ids)
+            ece, bin_conf, bin_acc, bin_count = expected_calibration_error_np(confidences, correct, n_bins=10)
 
         return {
             "ece": round(ece, 4),
