@@ -1,5 +1,5 @@
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.4.1+cpu
+torch @ https://download.pytorch.org/whl/cpu/torch-2.4.1%2Bcpu-cp312-cp312-linux_x86_64.whl ; sys_platform == "linux"
+torch==2.4.1 ; sys_platform != "linux"
 transformers==4.44.2
 tokenizers==0.19.1
 huggingface_hub==0.25.2
