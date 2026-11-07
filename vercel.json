@@ -15,7 +15,7 @@
     "api/index.py": {
       "maxDuration": 60,
       "memory": 2048,
-      "excludeFiles": "{tests/**,results/**,*.md,*.pt}"
+      "excludeFiles": "{tests/**,results/**,*.pt,node_modules/**,src/**}"
     }
   }
 }

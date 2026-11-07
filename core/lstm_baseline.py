@@ -61,11 +61,20 @@ def load_wikitext(split: str = "test", max_chars: int = 200_000) -> str:
     Returns:
         Concatenated non-empty lines.
     """
-    from datasets import load_dataset
+    sample_path = Path(__file__).resolve().parent / "wikitext_sample.txt"
+    if split == "test" and max_chars <= 45_000 and sample_path.exists():
+        return sample_path.read_text(encoding="utf-8")[:max_chars]
 
-    dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split=split)
-    text = "\n".join(line for line in dataset["text"] if line.strip())
-    return text[:max_chars]
+    try:
+        from datasets import load_dataset
+
+        dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split=split)
+        text = "\n".join(line for line in dataset["text"] if line.strip())
+        return text[:max_chars]
+    except Exception:
+        if sample_path.exists():
+            return sample_path.read_text(encoding="utf-8")[:max_chars]
+        raise
 
 
 def encode_corpus(tokenizer, text: str) -> Tensor:
