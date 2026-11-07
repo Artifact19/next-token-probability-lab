@@ -4,9 +4,6 @@ An interactive computational laboratory analyzing next-token probability distrib
 
 Built with a **React + Tailwind CSS** frontend and a **FastAPI** backend deployed on **Vercel**.
 
-- **Live Application:** https://next-token-probability-lab.vercel.app/
-- **GitHub Repository:** https://github.com/Artifact19/next-token-probability-lab
-
 ## Setup & Local Development
 
 ### 1. Install Dependencies
